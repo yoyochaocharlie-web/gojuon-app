@@ -58,8 +58,8 @@ html,body{height:100%;background:#e0dbd2;font-family:system-ui,-apple-system,san
 .kana-chip{border-radius:16px;padding:8px 10px;font-size:18px;font-weight:700;cursor:pointer;color:#1a1a1a;min-width:50px;text-align:center;transition:transform 0.1s;position:relative;display:flex;align-items:center;gap:4px;}
 .kana-chip.selected{outline:3px solid #1a1a1a;transform:scale(1.08);}
 .kana-chip:active{transform:scale(0.84);}
-.speak-btn{background:none;border:none;font-size:13px;cursor:pointer;padding:0;line-height:1;opacity:0.7;flex-shrink:0;}
-.speak-btn:active{opacity:1;transform:scale(1.2);}
+.speak-btn{background:none;border:none;font-size:20px;cursor:pointer;padding:4px 8px;line-height:1;opacity:0.8;border-radius:12px;}
+.speak-btn:active{opacity:1;transform:scale(1.15);background:rgba(0,0,0,0.08);}
 .vocab-panel{border-radius:28px;padding:18px;margin-top:14px;}
 .vocab-item{border-radius:18px;padding:12px 14px;margin-bottom:8px;}
 .vocab-word{font-size:18px;font-weight:700;color:#1a1a1a;}
@@ -281,9 +281,20 @@ function getAllKana(){
 function speak(text){
   if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='ja-JP';u.rate=0.8;u.pitch=1.1;
-  window.speechSynthesis.speak(u);
+  setTimeout(()=>{
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP';u.rate=0.8;u.pitch=1.1;
+    // Try to find Japanese voice
+    const voices=window.speechSynthesis.getVoices();
+    const jaVoice=voices.find(v=>v.lang==='ja-JP'||v.lang==='ja'||v.lang.startsWith('ja'));
+    if(jaVoice)u.voice=jaVoice;
+    window.speechSynthesis.speak(u);
+  },100);
+}
+// Preload voices on iOS
+window.speechSynthesis.getVoices();
+if(window.speechSynthesis.onvoiceschanged!==undefined){
+  window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
 }
 
 const NOW=new Date(),TY=NOW.getFullYear(),TM=NOW.getMonth(),TD=NOW.getDate();
@@ -418,26 +429,20 @@ function renderKanaGrid(){
     const lbl=document.createElement('div');lbl.className='row-label';lbl.textContent=row.row;g.appendChild(lbl);
     const rw=document.createElement('div');rw.className='kana-row';
     row.items.forEach((item,ci)=>{
-      const wrap=document.createElement('div');wrap.style.cssText='display:flex;align-items:center;gap:3px;';
       const c=document.createElement('div');c.className='kana-chip';
       const ip=practiced.has(item.k);
       c.style.background=ip?'#4ECDC4':chips[(ri*5+ci)%chips.length];
       if(ip)c.style.color='#003330';
       c.id='ch_'+item.k;
-      c.innerHTML=`<span style="font-size:18px;">${item.k}</span>`;
-      c.onclick=()=>selKana(item);
-      // Speak button
-      const sb=document.createElement('button');sb.className='speak-btn';sb.textContent='🔊';
-      sb.title='點擊聽發音';
-      sb.onclick=(e)=>{e.stopPropagation();speak(item.k);};
-      wrap.appendChild(c);wrap.appendChild(sb);
-      rw.appendChild(wrap);
+      c.textContent=item.k;
+      c.onclick=()=>{speak(item.k);selKana(item);};
+      rw.appendChild(c);
     });
     g.appendChild(rw);
   });
   const legend=document.createElement('div');
   legend.style.cssText='display:flex;gap:12px;margin-top:12px;font-size:11px;color:#888;align-items:center;';
-  legend.innerHTML='<span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:14px;height:14px;border-radius:4px;background:#4ECDC4;display:inline-block;"></span>已練習</span><span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:14px;height:14px;border-radius:4px;background:#FFE66D;display:inline-block;"></span>未練習</span><span>🔊 聽發音</span>';
+  legend.innerHTML='<span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:14px;height:14px;border-radius:4px;background:#4ECDC4;display:inline-block;"></span>已練習</span><span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:14px;height:14px;border-radius:4px;background:#FFE66D;display:inline-block;"></span>未練習</span><span>點假名自動發音</span>';
   g.appendChild(legend);
 }
 async function selKana(item){
@@ -452,7 +457,6 @@ async function selKana(item){
     <div style="font-size:48px;font-weight:800;color:#1a1a1a;">${item.k}</div>
     <div>
       <div style="font-size:13px;font-weight:600;color:#555;">${item.r}</div>
-      <button class="speak-big-btn" onclick="speak('${item.k}')">🔊 聽發音</button>
     </div>
   </div>
   <div class="loading"><div class="spinner"></div><div style="font-size:13px;font-weight:600;color:#888;">AI 生成「${item.k}」專屬內容...</div></div>`;
@@ -478,12 +482,11 @@ function showDetail(item,c){
     <div>
       <div style="font-size:48px;font-weight:800;color:#1a1a1a;line-height:1;">${item.k}</div>
       <div style="font-size:13px;font-weight:600;color:#555;">${item.r}</div>
-      <button class="speak-big-btn" onclick="speak('${item.k}')">🔊 聽發音</button>
     </div>
   </div>`;
   (c.vocab||[]).forEach((v,i)=>{
     const el=document.createElement('div');el.className='vocab-item';el.style.background=VC[i%VC.length];
-    el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;"><div class="vocab-word">${v.word}</div><button class="speak-btn" onclick="speak('${v.word}')" style="font-size:16px;">🔊</button></div><div class="vocab-mean">${v.roma}　${v.meaning}</div>`;
+    el.innerHTML=`<div class="vocab-word">${v.word}</div><div class="vocab-mean">${v.roma}　${v.meaning}</div>`;
     vp.appendChild(el);
   });
   const btn=document.createElement('button');btn.className='to-scene-btn';
@@ -516,9 +519,13 @@ function showLesson(){
   [0,1].forEach(i=>{const w=document.createElement('div');w.className=i===0?'bounce':'wiggle';w.style.cssText='width:48px;height:48px;';w.innerHTML=CHAR_SVG[CK[Math.floor(Math.random()*CK.length)]];chars.appendChild(w);});
   card.appendChild(chars);
   // Sentence with speak button
-  const jpDiv=document.createElement('div');jpDiv.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:4px;';
-  jpDiv.innerHTML=`<div class="sentence-jp" style="margin-bottom:0;">${lesson.jp}</div><button class="speak-btn" onclick="speak('${lesson.jp.replace(/'/g,"\\'")}');" style="font-size:18px;flex-shrink:0;">🔊</button>`;
-  card.appendChild(jpDiv);
+  const jpRow=document.createElement('div');jpRow.style.cssText='display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;';
+  const jpText=document.createElement('div');jpText.className='sentence-jp';jpText.style.marginBottom='0';jpText.textContent=lesson.jp;
+  const speakBtn=document.createElement('button');speakBtn.className='speak-btn';speakBtn.textContent='🔊';
+  speakBtn.style.cssText='flex-shrink:0;margin-top:4px;';
+  speakBtn.onclick=()=>speak(lesson.jp);
+  jpRow.appendChild(jpText);jpRow.appendChild(speakBtn);
+  card.appendChild(jpRow);
   card.innerHTML+=`<div class="sentence-roma">${lesson.roma||''}</div><div class="sentence-zh">${lesson.zh}</div>`;
   if(lesson.words&&lesson.words.length){
     const wb=document.createElement('div');wb.className='word-breakdown';
