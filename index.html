@@ -281,21 +281,32 @@ function getAllKana(){
 function speak(text){
   if(!window.speechSynthesis)return;
   window.speechSynthesis.cancel();
-  setTimeout(()=>{
-    const u=new SpeechSynthesisUtterance(text);
-    u.lang='ja-JP';u.rate=0.8;u.pitch=1.1;
-    // Try to find Japanese voice
-    const voices=window.speechSynthesis.getVoices();
-    const jaVoice=voices.find(v=>v.lang==='ja-JP'||v.lang==='ja'||v.lang.startsWith('ja'));
-    if(jaVoice)u.voice=jaVoice;
-    window.speechSynthesis.speak(u);
-  },100);
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='ja-JP';u.rate=0.8;u.pitch=1.1;
+  const voices=window.speechSynthesis.getVoices();
+  const jaVoice=voices.find(v=>v.lang&&(v.lang==='ja-JP'||v.lang==='ja'||v.lang.startsWith('ja')));
+  if(jaVoice)u.voice=jaVoice;
+  window.speechSynthesis.speak(u);
 }
-// Preload voices on iOS
-window.speechSynthesis.getVoices();
-if(window.speechSynthesis.onvoiceschanged!==undefined){
+// Preload voices
+if(window.speechSynthesis){
+  window.speechSynthesis.getVoices();
   window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
 }
+// iOS: use touchstart delegation on lessonArea for speak buttons
+document.addEventListener('DOMContentLoaded',()=>{
+  document.body.addEventListener('touchstart', function(e){
+    const btn=e.target.closest('[data-speak]');
+    if(btn){
+      e.preventDefault();
+      speak(btn.getAttribute('data-speak'));
+    }
+  },{passive:false});
+  document.body.addEventListener('click', function(e){
+    const btn=e.target.closest('[data-speak]');
+    if(btn) speak(btn.getAttribute('data-speak'));
+  });
+});
 
 const NOW=new Date(),TY=NOW.getFullYear(),TM=NOW.getMonth(),TD=NOW.getDate();
 function dim(y,m){return new Date(y,m+1,0).getDate();}
@@ -522,9 +533,8 @@ function showLesson(){
   const jpRow=document.createElement('div');jpRow.style.cssText='display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;';
   const jpText=document.createElement('div');jpText.className='sentence-jp';jpText.style.marginBottom='0';jpText.textContent=lesson.jp;
   const speakBtn=document.createElement('button');speakBtn.className='speak-btn';speakBtn.textContent='🔊';
-  speakBtn.style.cssText='flex-shrink:0;margin-top:4px;font-size:22px;background:#fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;';
+  speakBtn.style.cssText='flex-shrink:0;margin-top:4px;font-size:22px;background:#fff;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;';
   speakBtn.setAttribute('data-speak', lesson.jp);
-  speakBtn.addEventListener('click', function(){ speak(this.getAttribute('data-speak')); });
   jpRow.appendChild(jpText);jpRow.appendChild(speakBtn);
   card.appendChild(jpRow);
   card.innerHTML+=`<div class="sentence-roma">${lesson.roma||''}</div><div class="sentence-zh">${lesson.zh}</div>`;
