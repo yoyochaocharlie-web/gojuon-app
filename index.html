@@ -6,7 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="五十音">
-<meta name="theme-color" content="#F7F3EC"><link rel="apple-touch-icon" href="/icon.png">
+<meta name="theme-color" content="#F7F3EC">
+<link rel="apple-touch-icon" href="/icon.png">
 <title>五十音學習基地</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -46,14 +47,19 @@ html,body{height:100%;background:#e0dbd2;font-family:system-ui,-apple-system,san
 .start-btn:active{transform:scale(0.97);}
 .back-btn{background:none;border:none;font-size:24px;cursor:pointer;margin-bottom:10px;align-self:flex-start;}
 .p2-header{font-size:22px;font-weight:800;color:#1a1a1a;margin-bottom:4px;}
-.p2-sub{font-size:13px;color:#888;margin-bottom:16px;}
-.script-toggle{display:flex;gap:8px;margin-bottom:14px;}
-.script-btn{flex:1;padding:11px;border-radius:22px;border:none;font-size:13px;font-weight:700;cursor:pointer;}
+.p2-sub{font-size:13px;color:#888;margin-bottom:10px;}
+.script-toggle{display:flex;gap:8px;margin-bottom:10px;}
+.script-btn{flex:1;padding:10px;border-radius:22px;border:none;font-size:12px;font-weight:700;cursor:pointer;}
+.section-tab-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.section-tab{padding:7px 14px;border-radius:18px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:#E8E3DA;color:#888;transition:all 0.15s;}
+.section-tab.active{color:#1a1a1a;}
 .row-label{font-size:11px;font-weight:700;color:#888;margin-bottom:6px;margin-top:10px;}
-.kana-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
-.kana-chip{border-radius:18px;padding:10px 14px;font-size:20px;font-weight:700;cursor:pointer;color:#1a1a1a;min-width:54px;text-align:center;transition:transform 0.1s;}
+.kana-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:4px;}
+.kana-chip{border-radius:16px;padding:8px 10px;font-size:18px;font-weight:700;cursor:pointer;color:#1a1a1a;min-width:50px;text-align:center;transition:transform 0.1s;position:relative;display:flex;align-items:center;gap:4px;}
 .kana-chip.selected{outline:3px solid #1a1a1a;transform:scale(1.08);}
 .kana-chip:active{transform:scale(0.84);}
+.speak-btn{background:none;border:none;font-size:13px;cursor:pointer;padding:0;line-height:1;opacity:0.7;flex-shrink:0;}
+.speak-btn:active{opacity:1;transform:scale(1.2);}
 .vocab-panel{border-radius:28px;padding:18px;margin-top:14px;}
 .vocab-item{border-radius:18px;padding:12px 14px;margin-bottom:8px;}
 .vocab-word{font-size:18px;font-weight:700;color:#1a1a1a;}
@@ -85,6 +91,7 @@ html,body{height:100%;background:#e0dbd2;font-family:system-ui,-apple-system,san
 .loading{background:#F0EBE3;border-radius:28px;padding:32px 16px;text-align:center;}
 .spinner{width:36px;height:36px;border:4px solid #E8E3DA;border-top-color:#FF9EC4;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 14px;}
 .err{background:#FECACA;border-radius:28px;padding:20px;text-align:center;}
+.speak-big-btn{background:#FFE66D;border:none;border-radius:20px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;display:flex;align-items:center;gap:6px;}
 </style>
 </head>
 <body>
@@ -131,12 +138,13 @@ html,body{height:100%;background:#e0dbd2;font-family:system-ui,-apple-system,san
   </div>
   <div class="plan-card">
     <div style="font-size:13px;font-weight:700;color:#065F46;margin-bottom:10px;">學習方式</div>
-    <div class="plan-row"><div class="plan-icon" style="background:#FFE66D;">👀</div><div style="font-size:12px;font-weight:600;color:#065F46;">點假名 → 看例句 → 做例句考題（同一頁！）</div></div>
-    <div class="plan-row" style="margin-bottom:0"><div class="plan-icon" style="background:#C9B1FF;">✏️</div><div style="font-size:12px;font-weight:600;color:#065F46;">額外考題鞏固記憶，只考已學範圍</div></div>
+    <div class="plan-row"><div class="plan-icon" style="background:#FFE66D;">🔊</div><div style="font-size:12px;font-weight:600;color:#065F46;">點假名旁的喇叭聽發音</div></div>
+    <div class="plan-row"><div class="plan-icon" style="background:#FF9EC4;">👀</div><div style="font-size:12px;font-weight:600;color:#065F46;">清音、濁音、拗音全部收錄</div></div>
+    <div class="plan-row" style="margin-bottom:0"><div class="plan-icon" style="background:#C9B1FF;">✏️</div><div style="font-size:12px;font-weight:600;color:#065F46;">AI 生成例句考題，循序漸進</div></div>
   </div>
   <button class="start-btn" onclick="goPage(2)">
     <div style="font-size:22px;font-weight:800;color:#fff;">開始學習 →</div>
-    <div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:2px;">AI 生成例句和考題，循序漸進</div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:2px;">清音・濁音・拗音・發音全部收錄！</div>
   </button>
 </div>
 
@@ -144,10 +152,15 @@ html,body{height:100%;background:#e0dbd2;font-family:system-ui,-apple-system,san
   <div class="safe-top"></div>
   <button class="back-btn" onclick="goPage(1)">←</button>
   <div class="p2-header">五十音表</div>
-  <div class="p2-sub">點假名 → 看例句 + 做考題</div>
+  <div class="p2-sub">點🔊聽發音・點假名學習</div>
   <div class="script-toggle">
     <button id="hiraBtn" class="script-btn" style="background:#FF9EC4;color:#6B0032;" onclick="setScript('hira')">平假名 ひ</button>
     <button id="kataBtn" class="script-btn" style="background:#E8E3DA;color:#888;" onclick="setScript('kata')">片假名 ア</button>
+  </div>
+  <div class="section-tab-row">
+    <button class="section-tab active" id="tab-seion" onclick="setSection('seion')" style="background:#FF9EC4;color:#6B0032;">清音</button>
+    <button class="section-tab" id="tab-dakuten" onclick="setSection('dakuten')">濁音・半濁音</button>
+    <button class="section-tab" id="tab-youon" onclick="setSection('youon')">拗音</button>
   </div>
   <div id="kanaGrid"></div>
   <div id="vocabPanel" style="display:none;"></div>
@@ -176,7 +189,11 @@ const OC=['#FF9EC4','#74C7FF','#A8E6CF','#FFBC85'];
 const VC=['#FFE66D','#FF9EC4','#74C7FF','#A8E6CF','#FFBC85'];
 const WC=['#FFE66D','#FF9EC4','#74C7FF','#A8E6CF','#FFBC85','#C9B1FF'];
 const CHIP_C=['#FFE66D','#FF9EC4','#74C7FF','#A8E6CF','#FFBC85','#C9B1FF','#FF9EC4','#FFE66D','#A8E6CF','#74C7FF'];
-const HIRA=[
+const CHIP_D=['#D4E4FF','#FFD4E8','#D4FFE8','#FFE8D4','#E8D4FF','#D4F0FF'];
+const CHIP_Y=['#FFF0D4','#FFD4F0','#D4F0FF','#D4FFD4','#F0D4FF','#FFD4D4'];
+
+// 清音
+const HIRA_SEION=[
   {row:'あ行',items:[{k:'あ',r:'a'},{k:'い',r:'i'},{k:'う',r:'u'},{k:'え',r:'e'},{k:'お',r:'o'}]},
   {row:'か行',items:[{k:'か',r:'ka'},{k:'き',r:'ki'},{k:'く',r:'ku'},{k:'け',r:'ke'},{k:'こ',r:'ko'}]},
   {row:'さ行',items:[{k:'さ',r:'sa'},{k:'し',r:'shi'},{k:'す',r:'su'},{k:'せ',r:'se'},{k:'そ',r:'so'}]},
@@ -188,7 +205,29 @@ const HIRA=[
   {row:'ら行',items:[{k:'ら',r:'ra'},{k:'り',r:'ri'},{k:'る',r:'ru'},{k:'れ',r:'re'},{k:'ろ',r:'ro'}]},
   {row:'わ行',items:[{k:'わ',r:'wa'},{k:'を',r:'wo'},{k:'ん',r:'n'}]},
 ];
-const KATA=[
+// 濁音・半濁音
+const HIRA_DAKUTEN=[
+  {row:'が行',items:[{k:'が',r:'ga'},{k:'ぎ',r:'gi'},{k:'ぐ',r:'gu'},{k:'げ',r:'ge'},{k:'ご',r:'go'}]},
+  {row:'ざ行',items:[{k:'ざ',r:'za'},{k:'じ',r:'ji'},{k:'ず',r:'zu'},{k:'ぜ',r:'ze'},{k:'ぞ',r:'zo'}]},
+  {row:'だ行',items:[{k:'だ',r:'da'},{k:'ぢ',r:'ji'},{k:'づ',r:'zu'},{k:'で',r:'de'},{k:'ど',r:'do'}]},
+  {row:'ば行',items:[{k:'ば',r:'ba'},{k:'び',r:'bi'},{k:'ぶ',r:'bu'},{k:'べ',r:'be'},{k:'ぼ',r:'bo'}]},
+  {row:'ぱ行（半濁）',items:[{k:'ぱ',r:'pa'},{k:'ぴ',r:'pi'},{k:'ぷ',r:'pu'},{k:'ぺ',r:'pe'},{k:'ぽ',r:'po'}]},
+];
+// 拗音
+const HIRA_YOUON=[
+  {row:'きゃ行',items:[{k:'きゃ',r:'kya'},{k:'きゅ',r:'kyu'},{k:'きょ',r:'kyo'}]},
+  {row:'しゃ行',items:[{k:'しゃ',r:'sha'},{k:'しゅ',r:'shu'},{k:'しょ',r:'sho'}]},
+  {row:'ちゃ行',items:[{k:'ちゃ',r:'cha'},{k:'ちゅ',r:'chu'},{k:'ちょ',r:'cho'}]},
+  {row:'にゃ行',items:[{k:'にゃ',r:'nya'},{k:'にゅ',r:'nyu'},{k:'にょ',r:'nyo'}]},
+  {row:'ひゃ行',items:[{k:'ひゃ',r:'hya'},{k:'ひゅ',r:'hyu'},{k:'ひょ',r:'hyo'}]},
+  {row:'みゃ行',items:[{k:'みゃ',r:'mya'},{k:'みゅ',r:'myu'},{k:'みょ',r:'myo'}]},
+  {row:'りゃ行',items:[{k:'りゃ',r:'rya'},{k:'りゅ',r:'ryu'},{k:'りょ',r:'ryo'}]},
+  {row:'ぎゃ行',items:[{k:'ぎゃ',r:'gya'},{k:'ぎゅ',r:'gyu'},{k:'ぎょ',r:'gyo'}]},
+  {row:'じゃ行',items:[{k:'じゃ',r:'ja'},{k:'じゅ',r:'ju'},{k:'じょ',r:'jo'}]},
+  {row:'びゃ行',items:[{k:'びゃ',r:'bya'},{k:'びゅ',r:'byu'},{k:'びょ',r:'byo'}]},
+  {row:'ぴゃ行',items:[{k:'ぴゃ',r:'pya'},{k:'ぴゅ',r:'pyu'},{k:'ぴょ',r:'pyo'}]},
+];
+const KATA_SEION=[
   {row:'ア行',items:[{k:'ア',r:'a'},{k:'イ',r:'i'},{k:'ウ',r:'u'},{k:'エ',r:'e'},{k:'オ',r:'o'}]},
   {row:'カ行',items:[{k:'カ',r:'ka'},{k:'キ',r:'ki'},{k:'ク',r:'ku'},{k:'ケ',r:'ke'},{k:'コ',r:'ko'}]},
   {row:'サ行',items:[{k:'サ',r:'sa'},{k:'シ',r:'shi'},{k:'ス',r:'su'},{k:'セ',r:'se'},{k:'ソ',r:'so'}]},
@@ -200,6 +239,52 @@ const KATA=[
   {row:'ラ行',items:[{k:'ラ',r:'ra'},{k:'リ',r:'ri'},{k:'ル',r:'ru'},{k:'レ',r:'re'},{k:'ロ',r:'ro'}]},
   {row:'ワ行',items:[{k:'ワ',r:'wa'},{k:'ヲ',r:'wo'},{k:'ン',r:'n'}]},
 ];
+const KATA_DAKUTEN=[
+  {row:'ガ行',items:[{k:'ガ',r:'ga'},{k:'ギ',r:'gi'},{k:'グ',r:'gu'},{k:'ゲ',r:'ge'},{k:'ゴ',r:'go'}]},
+  {row:'ザ行',items:[{k:'ザ',r:'za'},{k:'ジ',r:'ji'},{k:'ズ',r:'zu'},{k:'ゼ',r:'ze'},{k:'ゾ',r:'zo'}]},
+  {row:'ダ行',items:[{k:'ダ',r:'da'},{k:'ヂ',r:'ji'},{k:'ヅ',r:'zu'},{k:'デ',r:'de'},{k:'ド',r:'do'}]},
+  {row:'バ行',items:[{k:'バ',r:'ba'},{k:'ビ',r:'bi'},{k:'ブ',r:'bu'},{k:'ベ',r:'be'},{k:'ボ',r:'bo'}]},
+  {row:'パ行（半濁）',items:[{k:'パ',r:'pa'},{k:'ピ',r:'pi'},{k:'プ',r:'pu'},{k:'ペ',r:'pe'},{k:'ポ',r:'po'}]},
+];
+const KATA_YOUON=[
+  {row:'キャ行',items:[{k:'キャ',r:'kya'},{k:'キュ',r:'kyu'},{k:'キョ',r:'kyo'}]},
+  {row:'シャ行',items:[{k:'シャ',r:'sha'},{k:'シュ',r:'shu'},{k:'ショ',r:'sho'}]},
+  {row:'チャ行',items:[{k:'チャ',r:'cha'},{k:'チュ',r:'chu'},{k:'チョ',r:'cho'}]},
+  {row:'ニャ行',items:[{k:'ニャ',r:'nya'},{k:'ニュ',r:'nyu'},{k:'ニョ',r:'nyo'}]},
+  {row:'ヒャ行',items:[{k:'ヒャ',r:'hya'},{k:'ヒュ',r:'hyu'},{k:'ヒョ',r:'hyo'}]},
+  {row:'ミャ行',items:[{k:'ミャ',r:'mya'},{k:'ミュ',r:'myu'},{k:'ミョ',r:'myo'}]},
+  {row:'リャ行',items:[{k:'リャ',r:'rya'},{k:'リュ',r:'ryu'},{k:'リョ',r:'ryo'}]},
+  {row:'ギャ行',items:[{k:'ギャ',r:'gya'},{k:'ギュ',r:'gyu'},{k:'ギョ',r:'gyo'}]},
+  {row:'ジャ行',items:[{k:'ジャ',r:'ja'},{k:'ジュ',r:'ju'},{k:'ジョ',r:'jo'}]},
+  {row:'ビャ行',items:[{k:'ビャ',r:'bya'},{k:'ビュ',r:'byu'},{k:'ビョ',r:'byo'}]},
+  {row:'ピャ行',items:[{k:'ピャ',r:'pya'},{k:'ピュ',r:'pyu'},{k:'ピョ',r:'pyo'}]},
+];
+
+function getKanaData(){
+  const s=SC,sec=SECTION;
+  if(s==='hira'&&sec==='seion') return HIRA_SEION;
+  if(s==='hira'&&sec==='dakuten') return HIRA_DAKUTEN;
+  if(s==='hira'&&sec==='youon') return HIRA_YOUON;
+  if(s==='kata'&&sec==='seion') return KATA_SEION;
+  if(s==='kata'&&sec==='dakuten') return KATA_DAKUTEN;
+  return KATA_YOUON;
+}
+function getAllKana(){
+  const s=SC;
+  const all=[];
+  const sets=s==='hira'?[HIRA_SEION,HIRA_DAKUTEN,HIRA_YOUON]:[KATA_SEION,KATA_DAKUTEN,KATA_YOUON];
+  sets.forEach(set=>set.forEach(row=>row.items.forEach(i=>all.push(i.k))));
+  return all;
+}
+
+// Speech
+function speak(text){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='ja-JP';u.rate=0.8;u.pitch=1.1;
+  window.speechSynthesis.speak(u);
+}
 
 const NOW=new Date(),TY=NOW.getFullYear(),TM=NOW.getMonth(),TD=NOW.getDate();
 function dim(y,m){return new Date(y,m+1,0).getDate();}
@@ -222,19 +307,18 @@ let practicedHira=new Set(lg('practicedHira',[]));
 let practicedKata=new Set(lg('practicedKata',[]));
 function savePracticed(){ls('practicedHira',[...practicedHira]);ls('practicedKata',[...practicedKata]);}
 let VY=TY,VM=TM,DD=ldd(VY,VM);
-let SC='hira',CK_item=null,CONTENT=null;
+let SC='hira',SECTION='seion',CK_item=null,CONTENT=null;
 let sesC=0,sesT=0,curLesson=0,extraQuizIdx=0,usedEQ=new Set();
 
 function getLearnedList(){
-  const data=SC==='hira'?HIRA:KATA;
-  const all=[];data.forEach(row=>row.items.forEach(i=>all.push(i.k)));
+  const all=getAllKana();
   const idx=CK_item?all.indexOf(CK_item.k):-1;
   return idx>=0?all.slice(0,idx+1):[CK_item?CK_item.k:''];
 }
 
 function updateProgressBars(){
-  const ha=[];HIRA.forEach(r=>r.items.forEach(i=>ha.push(i.k)));
-  const ka=[];KATA.forEach(r=>r.items.forEach(i=>ka.push(i.k)));
+  const ha=[];[HIRA_SEION,HIRA_DAKUTEN,HIRA_YOUON].forEach(s=>s.forEach(r=>r.items.forEach(i=>ha.push(i.k))));
+  const ka=[];[KATA_SEION,KATA_DAKUTEN,KATA_YOUON].forEach(s=>s.forEach(r=>r.items.forEach(i=>ka.push(i.k))));
   const hp=Math.round(practicedHira.size/ha.length*100);
   const kp=Math.round(practicedKata.size/ka.length*100);
   document.getElementById('hiraProgressBar').style.width=hp+'%';
@@ -270,7 +354,6 @@ function buildGrid(){
 }
 function prevMonth(){VM--;if(VM<0){VM=11;VY--;}DD=ldd(VY,VM);buildGrid();updStats();}
 function nextMonth(){if(VY===TY&&VM===TM)return;VM++;if(VM>11){VM=0;VY++;}DD=ldd(VY,VM);buildGrid();updStats();}
-
 function updStats(){
   document.getElementById('doneNum').textContent=[...DD].length;
   let s=0;if(VY===TY&&VM===TM)for(let d=TD;d>=1;d--){if(DD.has(d))s++;else break;}
@@ -279,7 +362,6 @@ function updStats(){
   document.getElementById('totalSessionDisp').textContent=TS;
   renderHist();updateProgressBars();
 }
-
 function renderHist(){
   const list=document.getElementById('historyList');list.innerHTML='';
   const h=lhist();
@@ -292,12 +374,10 @@ function renderHist(){
     list.appendChild(row);
   });
 }
-
 function setTodayLabel(){
   const w=['日','一','二','三','四','五','六'];
   document.getElementById('todayLabel').textContent=`今天 ${TM+1}/${TD} 星期${w[NOW.getDay()]}`;
 }
-
 function goPage(n){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page'+n).classList.add('active');
@@ -305,7 +385,6 @@ function goPage(n){
   if(n===1)updStats();
   if(n===2)renderKanaGrid();
 }
-
 function setScript(s){
   SC=s;
   document.getElementById('hiraBtn').style.cssText=`background:${s==='hira'?'#FF9EC4':'#E8E3DA'};color:${s==='hira'?'#6B0032':'#888'};`;
@@ -313,42 +392,70 @@ function setScript(s){
   document.getElementById('vocabPanel').style.display='none';
   CK_item=null;CONTENT=null;renderKanaGrid();
 }
-
+function setSection(sec){
+  SECTION=sec;
+  ['seion','dakuten','youon'].forEach(s=>{
+    const btn=document.getElementById('tab-'+s);
+    if(s===sec){
+      btn.classList.add('active');
+      const colors={seion:'#FF9EC4',dakuten:'#74C7FF',youon:'#A8E6CF'};
+      const textColors={seion:'#6B0032',dakuten:'#002B6B',youon:'#065F46'};
+      btn.style.background=colors[s];btn.style.color=textColors[s];
+    } else {
+      btn.classList.remove('active');
+      btn.style.background='#E8E3DA';btn.style.color='#888';
+    }
+  });
+  document.getElementById('vocabPanel').style.display='none';
+  CK_item=null;CONTENT=null;renderKanaGrid();
+}
 function renderKanaGrid(){
-  const data=SC==='hira'?HIRA:KATA;
+  const data=getKanaData();
   const practiced=SC==='hira'?practicedHira:practicedKata;
+  const chips=SECTION==='dakuten'?CHIP_D:SECTION==='youon'?CHIP_Y:CHIP_C;
   const g=document.getElementById('kanaGrid');g.innerHTML='';
   data.forEach((row,ri)=>{
     const lbl=document.createElement('div');lbl.className='row-label';lbl.textContent=row.row;g.appendChild(lbl);
     const rw=document.createElement('div');rw.className='kana-row';
     row.items.forEach((item,ci)=>{
+      const wrap=document.createElement('div');wrap.style.cssText='display:flex;align-items:center;gap:3px;';
       const c=document.createElement('div');c.className='kana-chip';
       const ip=practiced.has(item.k);
-      c.style.background=ip?'#4ECDC4':CHIP_C[(ri*5+ci)%CHIP_C.length];
+      c.style.background=ip?'#4ECDC4':chips[(ri*5+ci)%chips.length];
       if(ip)c.style.color='#003330';
-      c.id='ch_'+item.k;c.textContent=item.k;
-      c.onclick=()=>selKana(item);rw.appendChild(c);
+      c.id='ch_'+item.k;
+      c.innerHTML=`<span style="font-size:18px;">${item.k}</span>`;
+      c.onclick=()=>selKana(item);
+      // Speak button
+      const sb=document.createElement('button');sb.className='speak-btn';sb.textContent='🔊';
+      sb.title='點擊聽發音';
+      sb.onclick=(e)=>{e.stopPropagation();speak(item.k);};
+      wrap.appendChild(c);wrap.appendChild(sb);
+      rw.appendChild(wrap);
     });
     g.appendChild(rw);
   });
   const legend=document.createElement('div');
   legend.style.cssText='display:flex;gap:12px;margin-top:12px;font-size:11px;color:#888;align-items:center;';
-  legend.innerHTML='<span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:14px;height:14px;border-radius:4px;background:#4ECDC4;display:inline-block;"></span>已練習</span><span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:14px;height:14px;border-radius:4px;background:#FFE66D;display:inline-block;"></span>未練習</span>';
+  legend.innerHTML='<span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:14px;height:14px;border-radius:4px;background:#4ECDC4;display:inline-block;"></span>已練習</span><span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:14px;height:14px;border-radius:4px;background:#FFE66D;display:inline-block;"></span>未練習</span><span>🔊 聽發音</span>';
   g.appendChild(legend);
 }
-
 async function selKana(item){
   document.querySelectorAll('.kana-chip').forEach(c=>c.classList.remove('selected'));
   const ch=document.getElementById('ch_'+item.k);if(ch)ch.classList.add('selected');
   CK_item=item;CONTENT=null;
+  speak(item.k);
   const vp=document.getElementById('vocabPanel');
   vp.style.display='block';vp.className='vocab-panel';vp.style.background='#F0EBE3';
   const learned=getLearnedList();
   vp.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
     <div style="font-size:48px;font-weight:800;color:#1a1a1a;">${item.k}</div>
-    <div><div style="font-size:13px;font-weight:600;color:#555;">${item.r}</div><div style="font-size:11px;color:#aaa;margin-top:2px;">已學 ${learned.length} 個假名</div></div>
+    <div>
+      <div style="font-size:13px;font-weight:600;color:#555;">${item.r}</div>
+      <button class="speak-big-btn" onclick="speak('${item.k}')">🔊 聽發音</button>
+    </div>
   </div>
-  <div class="loading"><div class="spinner"></div><div style="font-size:13px;font-weight:600;color:#888;">AI 生成「${item.k}」專屬內容...</div><div style="font-size:11px;color:#aaa;margin-top:5px;">例句 + 配套考題 + 額外練習</div></div>`;
+  <div class="loading"><div class="spinner"></div><div style="font-size:13px;font-weight:600;color:#888;">AI 生成「${item.k}」專屬內容...</div></div>`;
   vp.scrollIntoView({behavior:'smooth',block:'nearest'});
   try{
     const res=await fetch('/api/generate',{
@@ -358,30 +465,31 @@ async function selKana(item){
     });
     if(!res.ok)throw new Error('API error');
     const c=await res.json();
-    CONTENT=c;showDetail(item,c,learned);
+    CONTENT=c;showDetail(item,c);
   }catch(e){
     vp.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="font-size:48px;font-weight:800;color:#1a1a1a;">${item.k}</div></div><div class="err"><div style="font-size:13px;font-weight:700;color:#991B1B;margin-bottom:5px;">生成失敗，請稍後再試</div><button onclick="selKana(CK_item)" style="background:#FF6B6B;color:#fff;border:none;border-radius:16px;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;">重新嘗試</button></div>`;
   }
 }
-
-function showDetail(item,c,learned){
+function showDetail(item,c){
   const vp=document.getElementById('vocabPanel');
   vp.style.background=CC[Math.floor(Math.random()*CC.length)];
   vp.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
     <div style="width:52px;height:52px;" class="wiggle">${CHAR_SVG[CK[Math.floor(Math.random()*CK.length)]]}</div>
-    <div><div style="font-size:48px;font-weight:800;color:#1a1a1a;line-height:1;">${item.k}</div>
-    <div style="font-size:13px;font-weight:600;color:#555;">${item.r}</div></div>
+    <div>
+      <div style="font-size:48px;font-weight:800;color:#1a1a1a;line-height:1;">${item.k}</div>
+      <div style="font-size:13px;font-weight:600;color:#555;">${item.r}</div>
+      <button class="speak-big-btn" onclick="speak('${item.k}')">🔊 聽發音</button>
+    </div>
   </div>`;
   (c.vocab||[]).forEach((v,i)=>{
     const el=document.createElement('div');el.className='vocab-item';el.style.background=VC[i%VC.length];
-    el.innerHTML=`<div class="vocab-word">${v.word}</div><div class="vocab-mean">${v.roma}　${v.meaning}</div>`;
+    el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;"><div class="vocab-word">${v.word}</div><button class="speak-btn" onclick="speak('${v.word}')" style="font-size:16px;">🔊</button></div><div class="vocab-mean">${v.roma}　${v.meaning}</div>`;
     vp.appendChild(el);
   });
   const btn=document.createElement('button');btn.className='to-scene-btn';
   btn.textContent=`開始「${item.k}」例句練習 →`;
   btn.onclick=()=>startSes(item,c);vp.appendChild(btn);
 }
-
 function startSes(item,c){
   CK_item=item;CONTENT=c;sesC=0;sesT=0;curLesson=0;extraQuizIdx=0;usedEQ=new Set();
   if(SC==='hira')practicedHira.add(item.k);else practicedKata.add(item.k);
@@ -389,7 +497,6 @@ function startSes(item,c){
   document.getElementById('p3title').textContent=`「${item.k}」例句 & 練習`;
   goPage(3);renderSbar();showLesson();
 }
-
 function renderSbar(){
   const b=document.getElementById('sessionBarWrap');b.innerHTML='';
   const d=document.createElement('div');d.className='session-bar';
@@ -397,7 +504,6 @@ function renderSbar(){
   d.innerHTML=`<div class="s-stat"><div class="s-num">${sesT}</div><div class="s-lbl">已答</div></div><div class="s-stat"><div class="s-num" style="color:#FF6B6B;">${sesC}</div><div class="s-lbl">答對</div></div><div class="s-stat"><div class="s-num" style="color:#4ECDC4;">${pct}%</div><div class="s-lbl">正確率</div></div><button class="stop-btn" onclick="finSes()">結束✓</button>`;
   b.appendChild(d);
 }
-
 function showLesson(){
   const lessons=CONTENT.lessons||[];
   const la=document.getElementById('lessonArea');la.innerHTML='';
@@ -409,13 +515,16 @@ function showLesson(){
   const chars=document.createElement('div');chars.style.cssText='display:flex;justify-content:center;gap:16px;margin-bottom:12px;';
   [0,1].forEach(i=>{const w=document.createElement('div');w.className=i===0?'bounce':'wiggle';w.style.cssText='width:48px;height:48px;';w.innerHTML=CHAR_SVG[CK[Math.floor(Math.random()*CK.length)]];chars.appendChild(w);});
   card.appendChild(chars);
-  card.innerHTML+=`<div class="sentence-jp">${lesson.jp}</div><div class="sentence-roma">${lesson.roma||''}</div><div class="sentence-zh">${lesson.zh}</div>`;
+  // Sentence with speak button
+  const jpDiv=document.createElement('div');jpDiv.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:4px;';
+  jpDiv.innerHTML=`<div class="sentence-jp" style="margin-bottom:0;">${lesson.jp}</div><button class="speak-btn" onclick="speak('${lesson.jp.replace(/'/g,"\\'")}');" style="font-size:18px;flex-shrink:0;">🔊</button>`;
+  card.appendChild(jpDiv);
+  card.innerHTML+=`<div class="sentence-roma">${lesson.roma||''}</div><div class="sentence-zh">${lesson.zh}</div>`;
   if(lesson.words&&lesson.words.length){
     const wb=document.createElement('div');wb.className='word-breakdown';
     lesson.words.forEach((w,i)=>{const t=document.createElement('div');t.className='word-tag';t.style.background=WC[i%WC.length];t.innerHTML=`<span style="font-weight:700;">${w.w}</span> <span style="opacity:.75;">${w.m}</span>`;wb.appendChild(t);});
     card.appendChild(wb);
   }
-  // Quiz for this lesson
   if(lesson.quiz){
     const qb=document.createElement('div');qb.className='quiz-box';
     qb.innerHTML=`<div class="quiz-q">${lesson.quiz.q}</div>`;
@@ -427,8 +536,7 @@ function showLesson(){
     lesson.quiz.opts.forEach((opt,i)=>{
       const b=document.createElement('button');b.className='opt';b.style.background=OC[i%OC.length];b.textContent=opt;
       b.onclick=()=>{
-        if(b.disabled)return;
-        sesT++;
+        if(b.disabled)return;sesT++;
         opts.querySelectorAll('.opt').forEach(x=>x.disabled=true);
         if(i===lesson.quiz.ans){sesC++;AC++;b.classList.add('correct');res.textContent='✓ 答對了！';res.style.color='#065F46';}
         else{b.classList.add('wrong');opts.querySelectorAll('.opt')[lesson.quiz.ans].classList.add('correct');res.textContent='✗ 答錯了，再記一次！';res.style.color='#991B1B';}
@@ -439,7 +547,6 @@ function showLesson(){
   }
   la.appendChild(card);
 }
-
 function showExtraQuiz(){
   const eqs=CONTENT.extra_quiz||[];
   if(!eqs.length){finSes();return;}
@@ -466,7 +573,6 @@ function showExtraQuiz(){
   });
   qb.appendChild(opts);qb.appendChild(res);qb.appendChild(nb);ea.appendChild(qb);
 }
-
 function finSes(){
   if(sesT>0){ahist(sesC,sesT,CK_item?CK_item.k:'');TS++;sg();DD.add(TD);sdd(TY,TM,DD);}
   document.getElementById('lessonArea').innerHTML='';
@@ -494,7 +600,6 @@ function finSes(){
   done.appendChild(row);
   document.getElementById('lessonArea').appendChild(done);
 }
-
 document.getElementById('p1char').innerHTML=CHAR_SVG.excited;
 setTodayLabel();buildGrid();updStats();
 </script>
