@@ -522,8 +522,9 @@ function showLesson(){
   const jpRow=document.createElement('div');jpRow.style.cssText='display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;';
   const jpText=document.createElement('div');jpText.className='sentence-jp';jpText.style.marginBottom='0';jpText.textContent=lesson.jp;
   const speakBtn=document.createElement('button');speakBtn.className='speak-btn';speakBtn.textContent='🔊';
-  speakBtn.style.cssText='flex-shrink:0;margin-top:4px;';
-  speakBtn.onclick=()=>speak(lesson.jp);
+  speakBtn.style.cssText='flex-shrink:0;margin-top:4px;font-size:22px;background:#fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;';
+  speakBtn.setAttribute('data-speak', lesson.jp);
+  speakBtn.addEventListener('click', function(){ speak(this.getAttribute('data-speak')); });
   jpRow.appendChild(jpText);jpRow.appendChild(speakBtn);
   card.appendChild(jpRow);
   card.innerHTML+=`<div class="sentence-roma">${lesson.roma||''}</div><div class="sentence-zh">${lesson.zh}</div>`;
