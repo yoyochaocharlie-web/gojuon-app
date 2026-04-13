@@ -1,32 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>五十音</title>
-</head>
-<body style="background:#F7F3EC;font-family:system-ui;padding:20px;">
-<h1 style="color:#1a1a1a;">五十音學習基地</h1>
-<button id="btn" onclick="test()" style="background:#FF6B6B;color:#fff;border:none;border-radius:16px;padding:12px 24px;font-size:16px;font-weight:700;cursor:pointer;margin-top:20px;">測試 AI 連線</button>
-<div id="result" style="margin-top:20px;font-size:14px;"></div>
+<html>
+<head><meta charset="UTF-8"><title>test</title></head>
+<body>
+<button onclick="test()">測試</button>
+<div id="r"></div>
 <script>
 async function test(){
-  document.getElementById('result').textContent='測試中...';
-  try{
-    const res=await fetch('/api/generate',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({kana:'あ',roma:'a',scriptType:'hira',learnedKana:['あ']})
-    });
-    const d=await res.json();
-    if(d.vocab){
-      document.getElementById('result').innerHTML='<span style="color:green;font-weight:700;">✓ AI 連線成功！單字：'+d.vocab[0].word+'（'+d.vocab[0].meaning+'）</span>';
-    } else {
-      document.getElementById('result').innerHTML='<span style="color:red;">回應異常：'+JSON.stringify(d)+'</span>';
-    }
-  }catch(e){
-    document.getElementById('result').innerHTML='<span style="color:red;">錯誤：'+e.message+'</span>';
-  }
+  const r=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kana:'あ',roma:'a',scriptType:'hira',learnedKana:['あ']})});
+  const d=await r.json();
+  document.getElementById('r').textContent=d.vocab?'成功:'+d.vocab[0].word:JSON.stringify(d);
 }
 </script>
 </body>
